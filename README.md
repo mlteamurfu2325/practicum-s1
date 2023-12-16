@@ -31,9 +31,9 @@ feat(summ): add summarizer model
 На примере Ubuntu/Debian:
 
 ```sh
-apt update && apt upgrade -y
+sudo apt update && apt upgrade -y
 
-apt install python3 python3-virtualenv python3-pip git
+sudo apt install python3 python3-virtualenv python3-pip git
 
 mkdir $HOME/fin-proj && cd $HOME/fin-proj
 
@@ -47,7 +47,7 @@ pip install faster-whisper streamlit
 
 mkdir models
 
-python3 utils/download_models.py
+python3 utils/download_faster_whisper_models.py
 
-python3 src/run_app.py
+streamlit run src/run_app.py
 ```
