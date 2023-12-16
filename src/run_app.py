@@ -61,17 +61,18 @@ if uploaded_file is not None:
     
     segments_bar = st.progress(0, text=progress_text)
     
-    for segment in segments:
-        st.write("[%.2fs -> %.2fs] %s" % (segment.start, segment.end, segment.text))
-        curr_bar_val = min(segment.end / info.duration, 1.0)
-        segments_bar.progress(curr_bar_val, text=progress_text)
+    with st.expander('Транскрипт текста'):
+        for segment in segments:
+            st.write("[%.2fs -> %.2fs] %s" % (segment.start, segment.end, segment.text))
+            curr_bar_val = min(segment.end / info.duration, 1.0)
+            segments_bar.progress(curr_bar_val, text=progress_text)
 
-    st.markdown(
-    """
-    <style>
-        .stProgress > div > div > div > div {
-            background-color: green;
-        }
-    </style>""",
-    unsafe_allow_html=True,
-               )
+        st.markdown(
+        """
+        <style>
+            .stProgress > div > div > div > div {
+                background-color: green;
+            }
+        </style>""",
+        unsafe_allow_html=True,
+                )
