@@ -32,17 +32,19 @@ if uploaded_file is not None:
     with st.spinner('Загружаем модель. Минутку...'):
         if check_cuda:
             local_device = 'cuda'
+            selected_compute_type = 'int8_float16'
             st.toast(body='Обнаружен GPU. Будет ускоряться!',
                      icon='🚀')
         else:
             local_device = 'cpu'
+            selected_compute_type = 'int8'
             st.toast(body='Обнаружен CPU. Придётся подождать...',
                      icon='🐌')
         
         model = WhisperModel(
                             model_size_or_path='models/large-v3/',
                             device=local_device,
-                            compute_type="int8",
+                            compute_type=selected_compute_type,
                             num_workers=4,
                             local_files_only=True
                             )
