@@ -9,3 +9,6 @@ media
 
 # Но не игнорируем сам .gitignore
 !.gitignore
+
+# Игнорируем генерируемые Python кэш-файлы
+**/__pycache__/
