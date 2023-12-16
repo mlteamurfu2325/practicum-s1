@@ -1,6 +1,7 @@
 from pathlib import Path
 import streamlit as st
 from faster_whisper import WhisperModel
+from utils.cuda_checker import check_cuda
 
 
 def save_uploaded_file(uploaded_file):
@@ -29,9 +30,18 @@ if uploaded_file is not None:
     uploaded_file_path = save_uploaded_file(uploaded_file)
 
     with st.spinner('Загружаем модель. Минутку...'):
+        if check_cuda:
+            local_device = 'cuda'
+            st.toast(body='Обнаружен GPU. Будет ускоряться!',
+                     icon='🚀')
+        else:
+            local_device = 'cpu'
+            st.toast(body='Обнаружен CPU. Придётся подождать...',
+                     icon='🐌')
+        
         model = WhisperModel(
                             model_size_or_path='models/large-v3/',
-                            device="cpu",
+                            device=local_device,
                             compute_type="int8",
                             num_workers=4,
                             local_files_only=True
