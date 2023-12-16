@@ -33,7 +33,7 @@ feat(summ): add summarizer model
 ```sh
 apt update && apt upgrade -y
 
-apt install python3 python3-virtualenv python3-pip
+apt install python3 python3-virtualenv python3-pip git
 
 mkdir $HOME/fin-proj && cd $HOME/fin-proj
 
