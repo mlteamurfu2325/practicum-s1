@@ -1,6 +1,9 @@
 from pathlib import Path
+import time
 import streamlit as st
 from faster_whisper import WhisperModel
+from utils.cuda_checker import check_cuda
+from pytube import YouTube
 
 
 def save_uploaded_file(uploaded_file):
@@ -22,34 +25,89 @@ def save_uploaded_file(uploaded_file):
 
 st.markdown('### Итоговый проект группы 1.12')
 
-uploaded_file = st.file_uploader('Загрузите файл подходящего формата',
-                                 type=['mp3', 'wav', 'mp4', 'webm'])
+uploaded_file_path = ''
+with st.container():
+    st.write('Выбор видеофайла для транскибирования')
+    file_mode = st.selectbox("Выберите тип загрузки файла: ", ['Local', 'URL'], index=0,
+                             help='Используйте "Local" для загрузки файла с локального компьютера или выберите "URL" для загрузки видео с YouTube.')
+    if file_mode == 'Local':
+        uploaded_file = st.file_uploader('Загрузите файл подходящего формата',
+                                         type=['mp3', 'wav', 'mp4', 'webm'])
 
-if uploaded_file is not None:
-    uploaded_file_path = save_uploaded_file(uploaded_file)
+        if uploaded_file is not None:
+            st.session_state['file_path'] = save_uploaded_file(uploaded_file)
 
-    with st.spinner('Загружаем модель. Минутку...'):
-        model = WhisperModel(
-                            model_size_or_path='models/large-v3/',
-                            device="cpu",
-                            compute_type="int8",
-                            num_workers=4,
-                            local_files_only=True
-                            )
+    else:
+        url = st.text_input('URL', help='Введите URL ссылку на видео с YouTube')
+        chosen = st.button('Выбрать видео')
+        if chosen:
+            tmp_dir_path = Path('media')
+            tmp_dir_path.mkdir(parents=True, exist_ok=True)
+            tmp_name = url.split('?v=')[1] + '.mp4'
+            uploaded_file_path = tmp_dir_path / tmp_name
+            st.session_state['file_path'] = uploaded_file_path
+            yt = YouTube(url)
+            stream = yt.streams.get_lowest_resolution()
+            with st.spinner('Загружаем видео...'):
+                stream.download(output_path=tmp_dir_path, filename=tmp_name)
+                st.toast(f'Видео с YouTube загружено {uploaded_file_path}')
 
-    with st.spinner('Первичный анализ файла. Минутку...'):
-        segments, info = model.transcribe(audio=str(uploaded_file_path),
-                                      beam_size=5)
+    transcribe = st.button('Запустить транскибирование!')
+    if transcribe:
 
-    st.write(f"Язык речи: {info.language} с вероятностью {info.language_probability}")
+        time_start = time.time()
 
-    st.write(f"Длительность в секундах: {info.duration}")
+        uploaded_file_path = st.session_state['file_path']
 
-    progress_text = 'Идёт транскрибирование сегментов аудио'
-    
-    segments_bar = st.progress(0, text=progress_text)
-    
-    for segment in segments:
-        st.write("[%.2fs -> %.2fs] %s" % (segment.start, segment.end, segment.text))
-        curr_bar_val = segment.end / info.duration
-        segments_bar.progress(curr_bar_val, text=progress_text)
+        with st.spinner('Загружаем модель. Минутку...'):
+            if check_cuda:
+                local_device = 'cuda'
+                selected_compute_type = 'int8_float16'
+                st.toast(body='Обнаружен GPU. Будет ускоряться!',
+                         icon='🚀')
+            else:
+                local_device = 'cpu'
+                selected_compute_type = 'int8'
+                st.toast(body='Обнаружен CPU. Придётся подождать...',
+                         icon='🐌')
+
+            model = WhisperModel(
+                model_size_or_path='models/large-v3/',
+                device=local_device,
+                compute_type=selected_compute_type,
+                num_workers=4,
+                local_files_only=True
+            )
+
+        with st.spinner('Первичный анализ файла. Минутку...'):
+            segments, info = model.transcribe(audio=str(uploaded_file_path),
+                                              beam_size=5)
+
+        st.write(f"Язык речи: {info.language} с вероятностью {info.language_probability}")
+
+        st.write(f"Длительность в секундах: {info.duration}")
+
+        progress_text = 'Идёт транскрибирование сегментов аудио'
+
+        segments_bar = st.progress(0, text=progress_text)
+
+        with st.expander('Транскрипт текста'):
+            for segment in segments:
+                st.write("[%.2fs -> %.2fs] %s" % (segment.start, segment.end, segment.text))
+                curr_bar_val = min(segment.end / info.duration, 1.0)
+                segments_bar.progress(curr_bar_val, text=progress_text)
+
+            time_total = time.time() - time_start
+
+            st.markdown(
+                """
+                <style>
+                    .stProgress > div > div > div > div {
+                        background-color: green;
+                    }
+                </style>""",
+                unsafe_allow_html=True,
+            )
+
+        with st.expander('Техническая информация'):
+            st.markdown(f'*Общее время транскрипции*: {time_total} с.')
