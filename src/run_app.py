@@ -1,4 +1,5 @@
 from pathlib import Path
+import time
 import streamlit as st
 from faster_whisper import WhisperModel
 from utils.cuda_checker import check_cuda
@@ -28,6 +29,7 @@ uploaded_file = st.file_uploader('Загрузите файл подходяще
 
 if uploaded_file is not None:
     uploaded_file_path = save_uploaded_file(uploaded_file)
+    time_start = time.time()
 
     with st.spinner('Загружаем модель. Минутку...'):
         if check_cuda:
@@ -67,6 +69,8 @@ if uploaded_file is not None:
             curr_bar_val = min(segment.end / info.duration, 1.0)
             segments_bar.progress(curr_bar_val, text=progress_text)
 
+        time_total = time.time() - time_start
+
         st.markdown(
         """
         <style>
@@ -76,3 +80,6 @@ if uploaded_file is not None:
         </style>""",
         unsafe_allow_html=True,
                 )
+
+    with st.expander('Техническая информация'):
+        st.markdown(f'*Общее время транскрипции*: {time_total} с.')
