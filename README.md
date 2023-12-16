@@ -47,7 +47,7 @@ pip install faster-whisper streamlit
 
 mkdir models
 
-python3 utils/download_faster_whisper_models.py
+python3 deploy/download_faster_whisper_models.py
 
 streamlit run src/run_app.py
 ```
