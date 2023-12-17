@@ -82,4 +82,4 @@ if uploaded_file is not None:
                 )
 
     with st.expander('Техническая информация'):
-        st.markdown(f'*Общее время транскрипции*: {time_total} с.')
+        st.markdown(f'*Общее время транскрипции*: {round(time_total)} с.')
