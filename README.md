@@ -49,5 +49,7 @@ mkdir models
 
 python3 deploy/download_faster_whisper_models.py
 
-streamlit run src/run_app.py
+cd src/
+
+streamlit run run_app.py
 ```
