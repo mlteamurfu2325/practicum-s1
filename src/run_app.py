@@ -22,16 +22,16 @@ def save_uploaded_file(uploaded_file):
     return file_path
 
 
-st.markdown('### Итоговый проект группы 1.12')
+st.markdown('### 📖 Итоговый проект группы 1.12')
 
-uploaded_file = st.file_uploader('Загрузите файл подходящего формата',
+uploaded_file = st.file_uploader('🔽 Загрузите файл подходящего формата',
                                  type=['mp3', 'wav', 'mp4', 'webm'])
 
 if uploaded_file is not None:
     uploaded_file_path = save_uploaded_file(uploaded_file)
     time_start = time.time()
 
-    with st.spinner('Загружаем модель. Минутку...'):
+    with st.spinner('🚚 Загружаем модель. Минутку...'):
         if check_cuda():
             selected_model_path = '../models/large-v3/'
             local_device = 'cuda'
@@ -53,7 +53,7 @@ if uploaded_file is not None:
                             local_files_only=True
                             )
 
-    with st.spinner('Первичный анализ файла. Минутку...'):
+    with st.spinner('🔬 Первичный анализ файла. Минутку...'):
         segments, info = model.transcribe(audio=str(uploaded_file_path),
                                       beam_size=5)
 
@@ -61,11 +61,11 @@ if uploaded_file is not None:
 
     st.write(f"Длительность в секундах: {info.duration}")
 
-    progress_text = 'Идёт транскрибирование сегментов аудио'
+    progress_text = '⏳ Идёт транскрибирование сегментов аудио'
     
     segments_bar = st.progress(0, text=progress_text)
     
-    with st.expander('Транскрипт текста'):
+    with st.expander('📜 Транскрипт текста'):
         for segment in segments:
             st.write("[%.2fs -> %.2fs] %s" % (segment.start, segment.end, segment.text))
             curr_bar_val = min(segment.end / info.duration, 1.0)
@@ -83,5 +83,5 @@ if uploaded_file is not None:
         unsafe_allow_html=True,
                 )
 
-    with st.expander('Техническая информация'):
+    with st.expander('🛠 Техническая информация'):
         st.markdown(f'*Общее время транскрипции*: {round(time_total)} с.')
