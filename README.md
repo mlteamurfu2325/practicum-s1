@@ -31,7 +31,7 @@ feat(summ): add summarizer model
 На примере Ubuntu/Debian:
 
 ```sh
-sudo apt update && apt upgrade -y
+sudo apt update && sudo apt upgrade -y
 
 sudo apt install python3 python3-virtualenv python3-pip git
 
