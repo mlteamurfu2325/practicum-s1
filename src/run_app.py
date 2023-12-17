@@ -7,7 +7,7 @@ from utils.cuda_checker import check_cuda
 
 def save_uploaded_file(uploaded_file):
     # specify the directory
-    dir_path = Path('media')
+    dir_path = Path('../media')
     dir_path.mkdir(parents=True, exist_ok=True)  # create directory if it does not exist
 
     # create a path object for the file
@@ -32,19 +32,21 @@ if uploaded_file is not None:
     time_start = time.time()
 
     with st.spinner('Загружаем модель. Минутку...'):
-        if check_cuda:
+        if check_cuda():
+            selected_model_path = '../models/large-v3/'
             local_device = 'cuda'
             selected_compute_type = 'int8_float16'
             st.toast(body='Обнаружен GPU. Будет ускоряться!',
                      icon='🚀')
         else:
+            selected_model_path = '../models/medium/'
             local_device = 'cpu'
             selected_compute_type = 'int8'
             st.toast(body='Обнаружен CPU. Придётся подождать...',
                      icon='🐌')
         
         model = WhisperModel(
-                            model_size_or_path='models/large-v3/',
+                            model_size_or_path=selected_model_path,
                             device=local_device,
                             compute_type=selected_compute_type,
                             num_workers=4,
