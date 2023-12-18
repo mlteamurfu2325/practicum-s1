@@ -43,7 +43,7 @@ python3 -m virtualenv .venv
 
 source .venv/bin/activate
 
-pip install faster-whisper streamlit
+pip install faster-whisper streamlit pytube
 
 mkdir models
 
