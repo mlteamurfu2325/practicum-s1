@@ -71,7 +71,7 @@ with st.container():
                 st.toast(body='Обнаружен GPU. Будет ускоряться!',
                         icon='🚀')
             else:
-                selected_model_path = '../../models/medium/'
+                selected_model_path = '../models/medium/'
                 local_device = 'cpu'
                 selected_compute_type = 'int8'
                 st.toast(body='Обнаружен CPU. Придётся подождать...',
