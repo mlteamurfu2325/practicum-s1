@@ -121,7 +121,7 @@ with st.container():
         with st.expander('Дополнительная информация'):
             if summary_checkbox:
                 summarizer = pipeline("summarization", model = "d0rj/rut5-base-summ")
-                st.write("**Суммаризованный текст:** ", summarizer(transcribe_text)[0]['summary_text'])
+                st.write("**Суммаризованный текст:**  ", summarizer(transcribe_text)[0]['summary_text'])
 
         with st.expander('🛠 Техническая информация'):
             st.markdown(f'*Общее время транскрипции*: {round(time_total)} с.')
