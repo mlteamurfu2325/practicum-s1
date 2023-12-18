@@ -4,6 +4,7 @@ import streamlit as st
 from faster_whisper import WhisperModel
 from pytube import YouTube
 from utils.cuda_checker import check_cuda
+from transformers import pipeline
 
 
 def save_uploaded_file(uploaded_file):
@@ -52,6 +53,10 @@ with st.container():
                 stream.download(output_path=tmp_dir_path, filename=tmp_name)
                 st.toast(f'Видео с YouTube загружено {uploaded_file_path}')
 
+    with st.expander('Дополнительный функционал'):
+        summary_checkbox = st.checkbox('Суммаризация текста', value=False)
+        transcribe_text = ""
+    
     transcribe = st.button('Запустить транскибирование!')
 
     if transcribe:
@@ -60,13 +65,13 @@ with st.container():
 
         with st.spinner('🚚 Загружаем модель. Минутку...'):
             if check_cuda():
-                selected_model_path = '../models/large-v3/'
+                selected_model_path = '../../models/large-v3/'
                 local_device = 'cuda'
                 selected_compute_type = 'int8_float16'
                 st.toast(body='Обнаружен GPU. Будет ускоряться!',
                         icon='🚀')
             else:
-                selected_model_path = '../models/medium/'
+                selected_model_path = '../../models/medium/'
                 local_device = 'cpu'
                 selected_compute_type = 'int8'
                 st.toast(body='Обнаружен CPU. Придётся подождать...',
@@ -97,6 +102,9 @@ with st.container():
                 st.write("[%.2fs -> %.2fs] %s" % (segment.start, segment.end, segment.text))
                 curr_bar_val = min(segment.end / info.duration, 1.0)
                 segments_bar.progress(curr_bar_val, text=progress_text)
+                
+                if summary_checkbox:
+                    transcribe_text += segment.text + " "
 
             time_total = time.time() - time_start
 
@@ -109,6 +117,12 @@ with st.container():
             </style>""",
             unsafe_allow_html=True,
                     )
+        
+        with st.expander('Дополнительная информация'):
+            if summary_checkbox:
+                summarizer = pipeline("summarization", model = "d0rj/rut5-base-summ")
+                st.write("**Суммаризованный текст:** ", summarizer(transcribe_text)[0]['summary_text'])
 
         with st.expander('🛠 Техническая информация'):
             st.markdown(f'*Общее время транскрипции*: {round(time_total)} с.')
+
