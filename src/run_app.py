@@ -8,6 +8,14 @@ from transformers import pipeline
 
 
 def save_uploaded_file(uploaded_file):
+    """
+        uploaded_file : file uploaded via streamlit.file_uploader()
+
+        Return : str
+            absolute filepath to the new uploaded file.
+
+        Comment: save the new uploaded file into local drive and provide its filepath.
+    """
     # specify the directory
     dir_path = Path('../media')
     dir_path.mkdir(parents=True, exist_ok=True)  # create directory if it does not exist
