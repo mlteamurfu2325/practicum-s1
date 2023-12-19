@@ -65,13 +65,13 @@ with st.container():
 
         with st.spinner('🚚 Загружаем модель. Минутку...'):
             if check_cuda():
-                selected_model_path = '../models/large-v3/'
+                selected_model_path = '../models/faster-whisper/large-v3/'
                 local_device = 'cuda'
                 selected_compute_type = 'int8_float16'
                 st.toast(body='Обнаружен GPU. Будет ускоряться!',
                         icon='🚀')
             else:
-                selected_model_path = '../models/medium/'
+                selected_model_path = '../models/faster-whisper/medium/'
                 local_device = 'cpu'
                 selected_compute_type = 'int8'
                 st.toast(body='Обнаружен CPU. Придётся подождать...',

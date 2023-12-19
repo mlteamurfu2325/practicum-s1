@@ -45,7 +45,7 @@ source .venv/bin/activate
 
 pip install faster-whisper streamlit pytube transformers[torch]
 
-mkdir models
+mkdir models/ && mkdir models/faster-whisper/
 
 python3 deploy/download_faster_whisper_models.py
 
