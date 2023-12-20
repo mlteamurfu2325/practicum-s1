@@ -22,6 +22,7 @@ def fetch_summary(text: str,
     >>> summary = fetch_summary(api_key, text)
     
     """
+
     try:
         if os.environ.get('LLM_API_KEY', None):
             openai.api_key = os.environ['LLM_API_KEY']
