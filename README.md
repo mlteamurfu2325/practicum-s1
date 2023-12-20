@@ -1,55 +1,78 @@
-# Соглашение по формату коммит-сообщений
-Для текста коммит-сообщений предлагается использовать модель `Semantic Commit Messages`.
-`<type>(<scope>): <subject>`
-## Пример
-```
-feat(summ): add summarizer model 
-^---------^  ^------------------^
-|                  |
-|                  +-> Кратко, в настоящем времени.
-|
-+-------> Тип - chore, docs, feat, fix, refactor, style, test, perf, ci, revert, deployment.
-          И скоуп (сфера) изменений
-```
-Примерный список скоупов:
-* core - основная функциональность по запуску streamlit
-* summ - модель саммаризации текста
-* transcr - транскрайбер `faster-whisper`
-* utils - вспомогательные утилиты
-* ...
+# Проект "Транскрайбер-аннотатор учебных видео- и аудиофайлов по социально-гуманитарным дисциплинам"
 
-Примеры оформления из истории нашего репозитория:
+## Начало работы
+Скрипт по развёртыванию проекта находится в ...
 
-`docs(deployment): add draft deployment info`
-
-`feat(utils): add faster-whisper models downloader`
-
-`feat(core): add first prototype`
-
-
-# Инструкция по развёртыванию
 На примере Ubuntu/Debian:
+<details>
+  <summary>Как развернуть</summary>
+    ```sh
+    sudo apt update && sudo apt upgrade -y
 
-```sh
-sudo apt update && sudo apt upgrade -y
+    sudo apt install python3 python3-virtualenv python3-pip git
 
-sudo apt install python3 python3-virtualenv python3-pip git
+    mkdir $HOME/fin-proj && cd $HOME/fin-proj
 
-mkdir $HOME/fin-proj && cd $HOME/fin-proj
+    git clone https://github.com/mlteamurfu2325/practicum-s1.git .
 
-git clone https://github.com/mlteamurfu2325/practicum-s1.git .
+    python3 -m virtualenv .venv
 
-python3 -m virtualenv .venv
+    source .venv/bin/activate
 
-source .venv/bin/activate
+    pip install faster-whisper streamlit pytube transformers[torch]
 
-pip install faster-whisper streamlit pytube transformers[torch]
+    mkdir models/ && mkdir models/faster-whisper/
 
-mkdir models/ && mkdir models/faster-whisper/
+    python3 deploy/download_faster_whisper_models.py
 
-python3 deploy/download_faster_whisper_models.py
+    cd src/
 
-cd src/
+    streamlit run run_app.py
+    ```
+</details>
 
-streamlit run run_app.py
+## Использование
+Проект практически значим для следующих кейсов:
+- обеспечение цифровой доступной среды для неслышащих и слабослышащих студентов - через возможность самостоятельной загрузки интересующего видео или аудиофайла и получения текста, файла субтитров;
+- оптимизация временных ресурсов на поиск тематического контента - через возможность получить аннотацию (саммари) содержания файла, чтобы принять решение о необходимости полного ознакомления с ним.
+
+## Команда
+Команда состоит из 4-х человек (группа №12):
+Кирилл Хитрин - Тимлид, менеджер проекта
+Алексей Горбачев - UI/UX-проектировщик, фронтенд-разработчик
+Данил Хардин - Инженер по машинному обучению, разработчик бэкенда
+Елена Икрина - QA-инженер, технический писатель
+
+## Лицензия
+Стандартная общественная лицензия GNU (GPL) версии 3 или выше.
+
+## Самоконтроль по критериям оценки
+1. Структура репозитория:
 ```
+.
+ * [README.md](./README.md)
+ * [deploy](./deploy)
+   * [download_faster_whisper_models.py](./deploy/download_faster_whisper_models.py)
+ * [src](./src)
+   * [llm_summ](./src/llm_summ)
+     * [summ_fetcher.py](./src/llm_summ/summ_fetcher.py)
+   * [utils](./src/utils)
+     * [cuda_checker.py](./src/utils/cuda_checker.py)
+   * [run_app.py](./src/run_app.py)
+ * [docs](./docs)
+     * [README.md](./docs/README.md)
+     * [hw01-project-pitch-group12.md](./docs/hw01-project-pitch-group12.md)
+     * [dev-conventions.md](./docs/dev-conventions.md)
+```
+2. Качество и чистота кода:
+- для контроля качества и чистоты кода приняты конвенции по его написанию для участников команды [dev-conventions.md](./docs/dev-conventions.md)
+- форматирование кода проверяется с помощью [black](https://github.com/psf/black)
+- применяется анализатор кода [flake8](https://flake8.pycqa.org/en/latest/)
+- комментарии к коду написаны в соответствии с конвенцией [Restructured Text (reST)](https://sphinx-rtd-tutorial.readthedocs.io/en/latest/docstrings.html)
+
+3. Документация
+Документация представлена ...
+
+4. Решение
+Работоспособность решения может быть проверена по URL: ...
+Либо путём развёртывания...
