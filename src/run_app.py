@@ -118,7 +118,7 @@ with st.container():
             unsafe_allow_html=True,
                     )
         
-        with st.expander('Дополнительная информация'):
+        with st.expander('📌 Дополнительная информация'):
             if summary_checkbox:
                 summarizer = pipeline("summarization", model = "d0rj/rut5-base-summ")
                 st.write("**Суммаризованный текст:**  ", summarizer(transcribe_text)[0]['summary_text'])
