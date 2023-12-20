@@ -19,3 +19,5 @@ jobs:
         run: |
           git checkout -b backup-main-$(date +%Y%m%d%H%M%S)
           git push origin backup-main-$(date +%Y%m%d%H%M%S)
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
