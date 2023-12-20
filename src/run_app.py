@@ -2,6 +2,7 @@ from pathlib import Path
 import time
 import streamlit as st
 from faster_whisper import WhisperModel
+import pysubs2
 from pytube import YouTube
 from utils.cuda_checker import check_cuda
 from llm_summ.summ_fetcher import fetch_summary
@@ -100,9 +101,12 @@ with st.container():
 
         with st.expander('📜 Транскрипт текста'):
             transcr_text = ''
+            segments_for_srt = []
             for segment in segments:
                 st.write("[%.2fs -> %.2fs] %s" % (segment.start, segment.end, segment.text))
                 transcr_text += segment.text + " "
+                segment_dict = {'start':segment.start,'end':segment.end,'text':segment.text}
+                segments_for_srt.append(segment_dict)
                 curr_bar_val = min(segment.end / info.duration, 1.0)
                 segments_bar.progress(curr_bar_val, text=progress_text)
 
@@ -121,11 +125,22 @@ with st.container():
             unsafe_allow_html=True,
                     )
 
+        with st.expander('📖 Текст без временны́х меток:'):
+            st.write(transcr_text)
+
         with st.expander('🔎 Аннотированный текст'):
             if summary_checkbox:
                 with st.spinner('🕵️‍♂️ Аннотируем текст...'):
                     summarized_text = fetch_summary(text=transcr_text)
                     st.write(summarized_text)
+
+        with st.expander('🎞️ SRT-файл для скачивания'):
+            subs = pysubs2.load_from_whisper(segments_for_srt)
+            srt_fine_name = f'{Path(uploaded_file_path).name}.srt'
+            srt_file_path = f'../media/{srt_fine_name}'
+            subs.save(srt_file_path)
+            with open(srt_file_path) as f:
+                st.download_button('Скачать SRT', f, file_name=srt_fine_name)
 
         with st.expander('🛠 Техническая информация'):
             st.markdown(f'*Общее время транскрипции*: {round(time_total)} с.')
