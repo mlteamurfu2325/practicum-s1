@@ -19,7 +19,7 @@
 
     source .venv/bin/activate
 
-    pip install faster-whisper streamlit pytube transformers[torch]
+    pip install faster-whisper streamlit pytube openai
 
     mkdir models/ && mkdir models/faster-whisper/
 
