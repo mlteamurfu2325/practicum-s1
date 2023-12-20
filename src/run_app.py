@@ -6,6 +6,7 @@ import pysubs2
 from pytube import YouTube
 from utils.cuda_checker import check_cuda
 from llm_summ.summ_fetcher import fetch_summary
+from st_copy_to_clipboard import st_copy_to_clipboard
 
 
 def save_uploaded_file(uploaded_file):
@@ -133,6 +134,7 @@ with st.container():
                 with st.spinner('🕵️‍♂️ Аннотируем текст...'):
                     summarized_text = fetch_summary(text=transcr_text)
                     st.write(summarized_text)
+                    st_copy_to_clipboard(summarized_text)
 
         with st.expander('🎞️ SRT-файл для скачивания'):
             subs = pysubs2.load_from_whisper(segments_for_srt)
