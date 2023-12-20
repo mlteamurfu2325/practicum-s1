@@ -23,7 +23,7 @@ def fetch_summary(text: str,
     
     """
     try:
-        if os.environ['LLM_API_KEY']:
+        if os.environ.get('LLM_API_KEY', None):
             openai.api_key = os.environ['LLM_API_KEY']
         else:
             openai.api_key = llm_api_key
