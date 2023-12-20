@@ -4,7 +4,7 @@ import streamlit as st
 from faster_whisper import WhisperModel
 from pytube import YouTube
 from utils.cuda_checker import check_cuda
-from transformers import pipeline
+from llm_summ.summ_fetcher import fetch_summary
 
 
 def save_uploaded_file(uploaded_file):
@@ -49,15 +49,15 @@ with st.container():
             st.session_state['file_path'] = uploaded_file_path
             yt = YouTube(url)
             stream = yt.streams.get_lowest_resolution()
-            with st.spinner('Загружаем видео...'):
+            with st.spinner('📥 Загружаем видео...'):
                 stream.download(output_path=tmp_dir_path, filename=tmp_name)
-                st.toast(f'Видео с YouTube загружено {uploaded_file_path}')
+                st.toast(f'💯 Видео с YouTube загружено {uploaded_file_path}')
 
-    with st.expander('Дополнительный функционал'):
-        summary_checkbox = st.checkbox('Суммаризация текста', value=False)
+    with st.expander('🗃️ Дополнительный функционал'):
+        summary_checkbox = st.checkbox('🔎 Аннотирование текста', value=False)
         transcribe_text = ""
     
-    transcribe = st.button('Запустить транскибирование!')
+    transcribe = st.button('🏁 Запустить транскибирование!')
 
     if transcribe:
         time_start = time.time()
@@ -89,17 +89,19 @@ with st.container():
             segments, info = model.transcribe(audio=str(uploaded_file_path),
                                               beam_size=5)
 
-        st.write(f"Язык речи: {info.language} с вероятностью {info.language_probability}")
+        st.write(f"🌍 Язык речи: {info.language} с вероятностью {info.language_probability}")
 
-        st.write(f"Длительность в секундах: {info.duration}")
+        st.write(f"🕒 Длительность в секундах: {info.duration}")
 
         progress_text = '⏳ Идёт транскрибирование сегментов аудио'
 
         segments_bar = st.progress(0, text=progress_text)
 
         with st.expander('📜 Транскрипт текста'):
+            transcr_text = ''
             for segment in segments:
                 st.write("[%.2fs -> %.2fs] %s" % (segment.start, segment.end, segment.text))
+                transcr_text += segment.text + " "
                 curr_bar_val = min(segment.end / info.duration, 1.0)
                 segments_bar.progress(curr_bar_val, text=progress_text)
                 
@@ -118,11 +120,11 @@ with st.container():
             unsafe_allow_html=True,
                     )
         
-        with st.expander('📌 Дополнительная информация'):
+        with st.expander('🔎 Аннотированный текст'):
             if summary_checkbox:
-                summarizer = pipeline("summarization", model = "d0rj/rut5-base-summ")
-                st.write("**Суммаризованный текст:**  ", summarizer(transcribe_text)[0]['summary_text'])
+                with st.spinner('🕵️‍♂️ Аннотируем текст...'):
+                    summarized_text = fetch_summary(text=transcr_text)
+                    st.write(summarized_text)
 
         with st.expander('🛠 Техническая информация'):
             st.markdown(f'*Общее время транскрипции*: {round(time_total)} с.')
-
