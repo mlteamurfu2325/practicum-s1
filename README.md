@@ -6,7 +6,7 @@
 На примере Ubuntu/Debian:
 <details>
   <summary>Как развернуть</summary>
-    ```sh
+    
     sudo apt update && sudo apt upgrade -y
 
     sudo apt install python3 python3-virtualenv python3-pip git
@@ -28,7 +28,7 @@
     cd src/
 
     streamlit run run_app.py
-    ```
+
 </details>
 
 ## Использование
@@ -48,8 +48,6 @@
 
 ## Самоконтроль по критериям оценки
 1. Структура репозитория:
-```
-.
  * [README.md](./README.md)
  * [deploy](./deploy)
    * [download_faster_whisper_models.py](./deploy/download_faster_whisper_models.py)
@@ -63,7 +61,7 @@
      * [README.md](./docs/README.md)
      * [hw01-project-pitch-group12.md](./docs/hw01-project-pitch-group12.md)
      * [dev-conventions.md](./docs/dev-conventions.md)
-```
+
 2. Качество и чистота кода:
 - для контроля качества и чистоты кода приняты конвенции по его написанию для участников команды [dev-conventions.md](./docs/dev-conventions.md)
 - форматирование кода проверяется с помощью [black](https://github.com/psf/black)
@@ -71,8 +69,11 @@
 - комментарии к коду написаны в соответствии с конвенцией [Restructured Text (reST)](https://sphinx-rtd-tutorial.readthedocs.io/en/latest/docstrings.html)
 
 3. Документация
+   
 Документация представлена ...
 
 4. Решение
+   
 Работоспособность решения может быть проверена по URL: ...
+
 Либо путём развёртывания...
