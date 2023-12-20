@@ -33,7 +33,7 @@ __Цель проекта__ - облегчить процесс обучения
 
     source .venv/bin/activate
 
-    pip install faster-whisper streamlit pytube openai
+    pip install faster-whisper streamlit pytube openai st_copy_to_clipboard
 
     mkdir models/ && mkdir models/faster-whisper/
 
