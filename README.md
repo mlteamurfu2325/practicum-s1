@@ -27,7 +27,8 @@ __Цель проекта__ - облегчить процесс обучения
 
     mkdir $HOME/fin-proj && cd $HOME/fin-proj
 
-    git clone https://github.com/mlteamurfu2325/practicum-s1.git .
+    # Если не релизную ветку, то игноируем `--branch release-1.0.0`
+    git clone --branch release-1.0.0 https://github.com/mlteamurfu2325/practicum-s1.git .
 
     python3 -m virtualenv .venv
 
