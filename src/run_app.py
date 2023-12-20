@@ -29,9 +29,10 @@ st.markdown('### 📖 Итоговый проект группы 1.12')
 uploaded_file_path = ''
 with st.container():
     st.write('Выбор видеофайла для транскибирования')
-    file_mode = st.selectbox("Выберите тип загрузки файла: ", ['Local', 'URL'], index=0,
-                             help='Используйте "Local" для загрузки файла с локального компьютера или выберите "URL" для загрузки видео с YouTube.')
-    if file_mode == 'Local':
+    file_mode = st.selectbox("Выберите тип загрузки файла: ",
+                             ['С Вашего устройства', 'С YouTube'], index=0,
+                             help='Используйте "С Вашего устройства" для загрузки файла с локального компьютера или выберите "С YouTube" для загрузки видео по ссылке с YouTube.')
+    if file_mode == 'С Вашего устройства':
         uploaded_file = st.file_uploader('🔽 Загрузите файл подходящего формата',
                                  type=['mp3', 'wav', 'mp4', 'webm'])
 
@@ -39,7 +40,7 @@ with st.container():
             st.session_state['file_path'] = save_uploaded_file(uploaded_file)
 
     else:
-        url = st.text_input('URL', help='Введите URL ссылку на видео с YouTube')
+        url = st.text_input('С YouTube', help='Введите URL ссылку на видео с YouTube')
         chosen = st.button('Выбрать видео')
         if chosen:
             tmp_dir_path = Path('media')
@@ -56,7 +57,7 @@ with st.container():
     with st.expander('🗃️ Дополнительный функционал'):
         summary_checkbox = st.checkbox('🔎 Аннотирование текста', value=False)
         transcribe_text = ""
-    
+
     transcribe = st.button('🏁 Запустить транскибирование!')
 
     if transcribe:
@@ -104,7 +105,7 @@ with st.container():
                 transcr_text += segment.text + " "
                 curr_bar_val = min(segment.end / info.duration, 1.0)
                 segments_bar.progress(curr_bar_val, text=progress_text)
-                
+
                 if summary_checkbox:
                     transcribe_text += segment.text + " "
 
@@ -119,7 +120,7 @@ with st.container():
             </style>""",
             unsafe_allow_html=True,
                     )
-        
+
         with st.expander('🔎 Аннотированный текст'):
             if summary_checkbox:
                 with st.spinner('🕵️‍♂️ Аннотируем текст...'):
