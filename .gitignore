@@ -13,5 +13,8 @@ media
 # Не игнорируем .github
 !.github
 
+# Не игнорируем .pre-commit-config.yaml
+!.pre-commit-config.yaml
+
 # Игнорируем генерируемые Python кэш-файлы
 **/__pycache__/
