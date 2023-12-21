@@ -22,7 +22,7 @@ __Цель проекта__ - облегчить процесс обучения
 
 На примере Ubuntu /Debian:
 <details>
-  <summary>Как развернуть приложение локально</summary>
+  <summary><b>Как развернуть приложение локально</b></summary>
     
     sudo apt update && sudo apt upgrade -y
 
