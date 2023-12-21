@@ -1,12 +1,14 @@
-from pathlib import Path
 import time
+from pathlib import Path
+
+import pysubs2
 import streamlit as st
 from faster_whisper import WhisperModel
-import pysubs2
 from pytube import YouTube
-from utils.cuda_checker import check_cuda
-from llm_summ.summ_fetcher import fetch_summary
 from st_copy_to_clipboard import st_copy_to_clipboard
+
+from llm_summ.summ_fetcher import fetch_summary
+from utils.cuda_checker import check_cuda
 
 
 def save_uploaded_file(uploaded_file):
