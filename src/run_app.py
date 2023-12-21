@@ -3,6 +3,7 @@ from pathlib import Path
 
 import pysubs2
 import streamlit as st
+import streamlit_ext as ste
 from faster_whisper import WhisperModel
 from pytube import YouTube
 from st_copy_to_clipboard import st_copy_to_clipboard
@@ -11,10 +12,18 @@ from llm_summ.summ_fetcher import fetch_summary
 from utils.cuda_checker import check_cuda
 
 
-def save_uploaded_file(uploaded_file):
-    # specify the directory
+# No type hints yet available for Streamlit
+# See https://github.com/streamlit/streamlit/issues/7801
+def save_uploaded_file(uploaded_file) -> Path:
+    """
+    Save an uploaded file to the specified directory and return the file path.
+
+    :param uploaded_file: The file uploaded by the user through the Streamlit interface.
+    :return: The path to the saved file.
+    :rtype: Path
+    """
     dir_path = Path("../media")
-    dir_path.mkdir(parents=True, exist_ok=True)  # create directory if it does not exist
+    dir_path.mkdir(parents=True, exist_ok=True)
 
     # create a path object for the file
     file_path = dir_path / uploaded_file.name
@@ -41,7 +50,9 @@ with st.container():
     )
     if file_mode == "С Вашего устройства":
         uploaded_file = st.file_uploader(
-            "🔽 Загрузите файл подходящего формата", type=["mp3", "wav", "mp4", "webm"]
+            label="🔽 Загрузите файл подходящего формата",
+            type=["mp3", "wav", "mp4", "webm"],
+            accept_multiple_files=False
         )
 
         if uploaded_file is not None:
@@ -57,10 +68,10 @@ with st.container():
             uploaded_file_path = tmp_dir_path / tmp_name
             st.session_state["file_path"] = uploaded_file_path
             yt = YouTube(url)
-            stream = yt.streams.get_lowest_resolution()
-            with st.spinner("📥 Загружаем видео..."):
+            stream = yt.streams.get_audio_only()
+            with st.spinner("📥 Загружаем файл..."):
                 stream.download(output_path=tmp_dir_path, filename=tmp_name)
-                st.toast(f"💯 Видео с YouTube загружено {uploaded_file_path}")
+                st.toast(f"💯 Файл с YouTube загружен {uploaded_file_path}")
 
     with st.expander("🗃️ Дополнительный функционал"):
         summary_checkbox = st.checkbox("🔎 Аннотирование текста", value=False)
@@ -129,6 +140,7 @@ with st.container():
 
             time_total = time.time() - time_start
 
+            # change progress bar color when done
             st.markdown(
                 """
             <style>
@@ -155,7 +167,7 @@ with st.container():
             srt_file_path = f"../media/{srt_fine_name}"
             subs.save(srt_file_path)
             with open(srt_file_path) as f:
-                st.download_button("📎 Скачать SRT", f, file_name=srt_fine_name)
+                ste.download_button("📎 Скачать SRT", f, file_name=srt_fine_name)
 
         with st.expander("🛠 Техническая информация"):
             st.markdown(f"*Общее время транскрипции*: {round(time_total)} с.")
