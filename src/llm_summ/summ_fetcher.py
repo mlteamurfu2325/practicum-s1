@@ -2,36 +2,38 @@ import os
 import openai
 
 
-def fetch_summary(text: str,
-                  llm_model: str = 'openai/gpt-3.5-turbo-1106',
-                  llm_api_key: str | None = None) -> str:
+def fetch_summary(
+    text: str,
+    llm_model: str = "openai/gpt-3.5-turbo-1106",
+    llm_api_key: str | None = None,
+) -> str:
     """Fetch summary from LLM API using provided text and optionally an API key.
-    
+
     :param text: Input text to summarize
     :type text: str
     :param llm_model: Name of LLM model to use
     :type llm_model: str
     :param llm_api_key: API key for service (optional)
     :type llm_api_key: str, optional
-    :return: Summary text response from API 
+    :return: Summary text response from API
     :rtype: str
-    
+
     :Example:
-    
+
     >>> summary = fetch_summary(text)
     >>> summary = fetch_summary(api_key, text)
-    
+
     """
     try:
-        if os.environ.get('LLM_API_KEY', None):
-            openai.api_key = os.environ['LLM_API_KEY']
+        if os.environ.get("LLM_API_KEY", None):
+            openai.api_key = os.environ["LLM_API_KEY"]
         else:
             openai.api_key = llm_api_key
     except Exception as error:
         raise ValueError(f"LLM_API key error: {error}")
 
     try:
-        openai.base_url = os.environ['LLM_URL']
+        openai.base_url = os.environ["LLM_URL"]
     except Exception as error:
         raise ValueError(f"LLM_URL error: {error}")
 

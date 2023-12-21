@@ -1,5 +1,6 @@
 import ctypes
 
+
 def check_cuda():
     """
     Check if CUDA GPUs are available without importing torch or tensorflow
