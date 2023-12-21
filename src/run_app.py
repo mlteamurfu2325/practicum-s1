@@ -43,9 +43,9 @@ with st.container():
 
     else:
         url = st.text_input('С YouTube', help='Введите URL ссылку на видео с YouTube')
-        chosen = st.button('Выбрать видео')
+        chosen = st.button('🎧 Выбрать медиафайл')
         if chosen:
-            tmp_dir_path = Path('media')
+            tmp_dir_path = Path('../media')
             tmp_dir_path.mkdir(parents=True, exist_ok=True)
             tmp_name = url.split('?v=')[1] + '.mp4'
             uploaded_file_path = tmp_dir_path / tmp_name
@@ -142,7 +142,7 @@ with st.container():
             srt_file_path = f'../media/{srt_fine_name}'
             subs.save(srt_file_path)
             with open(srt_file_path) as f:
-                st.download_button('Скачать SRT', f, file_name=srt_fine_name)
+                st.download_button('📎 Скачать SRT', f, file_name=srt_fine_name)
 
         with st.expander('🛠 Техническая информация'):
             st.markdown(f'*Общее время транскрипции*: {round(time_total)} с.')
