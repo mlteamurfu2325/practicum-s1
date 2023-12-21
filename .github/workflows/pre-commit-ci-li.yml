@@ -1,3 +1,4 @@
+name: pre-commit-ci-lite
 on:
   pull_request:
   push:
