@@ -1,3 +1,4 @@
+exclude: '^.+(\.md)$'
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v4.4.0
@@ -5,7 +6,7 @@ repos:
       - id: check-added-large-files
       - id: check-ast
       - id: trailing-whitespace
-        args: [--markdown-linebreak-ext=md] 
+        args: [--markdown-linebreak-ext=md]
       - id: end-of-file-fixer
       - id: check-yaml
       - id: check-merge-conflict
@@ -16,7 +17,7 @@ repos:
     rev: 5.13.2
     hooks:
       - id: isort
-        args: ["--profile", "black"]
+        args: ["--profile", "black", "--lines-after-imports", "2"]
 
   - repo: https://github.com/psf/black
     rev: 23.12.0
