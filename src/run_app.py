@@ -6,7 +6,7 @@ import streamlit as st
 import streamlit_ext as ste
 from faster_whisper import WhisperModel
 from pytube import YouTube
-from st_copy_to_clipboard import st_copy_to_clipboard
+from streamlit_extras.stylable_container import stylable_container
 
 from llm_summ.summ_fetcher import fetch_summary
 from utils.cuda_checker import check_cuda
@@ -109,10 +109,10 @@ with st.container():
             )
 
         st.write(
-            f"🌍 Язык речи: {info.language} с вероятностью {info.language_probability}"
+            f"🌍 Язык речи: {info.language.upper()} с вероятностью {round(info.language_probability,2)}"
         )
 
-        st.write(f"🕒 Длительность в секундах: {info.duration}")
+        st.write(f"🕒 Длительность в секундах: {round(info.duration, 2)}")
 
         progress_text = "⏳ Идёт транскрибирование сегментов аудио"
 
@@ -152,14 +152,29 @@ with st.container():
             )
 
         with st.expander("📖 Текст без временны́х меток:"):
-            st.write(transcr_text)
+            with stylable_container(
+                "codeblock",
+                """
+                code {
+                    white-space: pre-wrap !important;
+                }
+                """,
+            ):
+                st.code(body=transcr_text)
 
         with st.expander("🔎 Аннотированный текст"):
             if summary_checkbox:
                 with st.spinner("🕵️‍♂️ Аннотируем текст..."):
                     summarized_text = fetch_summary(text=transcr_text)
-                    st.write(summarized_text)
-                    st_copy_to_clipboard(summarized_text)
+                    with stylable_container(
+                        "codeblock",
+                        """
+                        code {
+                            white-space: pre-wrap !important;
+                        }
+                        """,
+                    ):
+                        st.code(body=summarized_text)
 
         with st.expander("🎞️ SRT-файл для скачивания"):
             subs = pysubs2.load_from_whisper(segments_for_srt)
