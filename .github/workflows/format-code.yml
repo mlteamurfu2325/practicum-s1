@@ -38,8 +38,8 @@ jobs:
         uses: peter-evans/create-pull-request@v4
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          commit-message: "${{ steps.commit-details.outputs.hash }}) GHA isort and black formatting"
-          title: "${{ steps.commit-details.outputs.hash }}) GHA isort and black formatting"
+          commit-message: "${{ steps.commit-details.outputs.hash }} GHA isort and black formatting"
+          title: "${{ steps.commit-details.outputs.hash }} GHA isort and black formatting"
           body: "This PR applies isort and black formatting to the Python code."
           branch: "formatting-changes-${{ steps.commit-details.outputs.hash }}"
           base: "main"
