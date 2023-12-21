@@ -52,7 +52,7 @@ with st.container():
         uploaded_file = st.file_uploader(
             label="🔽 Загрузите файл подходящего формата",
             type=["mp3", "wav", "mp4", "webm"],
-            accept_multiple_files=False
+            accept_multiple_files=False,
         )
 
         if uploaded_file is not None:
