@@ -37,9 +37,10 @@ __Цель проекта__ - облегчить процесс обучения
 
     source .venv/bin/activate
 
+    # Либо pip3 install -r requirements.txt
     pip install faster-whisper streamlit pytube openai pysubs2 streamlit_ext streamlit_extras
 
-    # (для разработчиков - установка инструментов контроля качества кода)
+    # (для разработчиков - доп. установка инструментов контроля качества кода)
     # pip install pre-commit pylint black isort
     # pre-commit install
 
