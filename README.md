@@ -96,13 +96,21 @@ __Цель проекта__ - облегчить процесс обучения
 │   ├── hw01-project-pitch-group12.md
 │   └── user_guide.md
 ├── gpl-3.0.txt
-└── src
-    ├── llm_summ
-    │   └── summ_fetcher.py
-    ├── run_app.py
-    └── utils
-        ├── cuda_checker.py
-        └── data_validator.py
+├── pytest.ini
+├── requirements.txt
+├── src
+│   ├── llm_summ
+│   │   ├── __init__.py
+│   │   └── summ_fetcher.py
+│   ├── run_app.py
+│   └── utils
+│       ├── __init__.py
+│       ├── cuda_checker.py
+│       ├── data_validator.py
+│       └── upload_file_saver.py
+└── tests
+    ├── test_cuda_checker.py
+    └── test_data_validator.py
 ```
 
 #### 1.5.2. Качество и чистота кода:
