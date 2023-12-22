@@ -18,3 +18,6 @@ media
 
 # Игнорируем генерируемые Python кэш-файлы
 **/__pycache__/
+
+# Игнорируем pyvenv.cfg
+pyvenv.cfg
