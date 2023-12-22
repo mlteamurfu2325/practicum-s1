@@ -1,3 +1,4 @@
+"""Module for downloading the Faster-Whisper models."""
 from pathlib import Path
 
 from faster_whisper import download_model

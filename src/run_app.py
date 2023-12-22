@@ -62,8 +62,8 @@ with st.container():
 
     else:
         url = st.text_input(
-            "Ссылка на YouTube",
-            placeholder="Введите URL ссылку на видео с YouTube",
+            label="Ссылка на YouTube",
+            placeholder="Ссылка формата https://www.youtube.com/watch?v=...",
             key="yt_url_input",
         )
         if not validate_youtube_url(url):
@@ -82,11 +82,16 @@ with st.container():
                 tmp_name = url.split("?v=")[1] + ".mp4"
                 uploaded_file_path = tmp_dir_path / tmp_name
                 st.session_state["file_path"] = uploaded_file_path
-                yt = YouTube(url)
-                stream = yt.streams.get_audio_only()
-                with st.spinner("📥 Загружаем файл..."):
-                    stream.download(output_path=tmp_dir_path, filename=tmp_name)
-                    st.toast(f"💯 Файл с YouTube загружен {uploaded_file_path}")
+                try:
+                    yt = YouTube(url)
+                    stream = yt.streams.get_audio_only()
+                    with st.spinner("📥 Загружаем файл..."):
+                        stream.download(output_path=tmp_dir_path, filename=tmp_name)
+                        st.toast(f"💯 Файл с YouTube загружен {uploaded_file_path}")
+                except:
+                    st.error(
+                        "😔 Не удалось загрузить видео с YouTube. Попробуйте другую ссылку или выберите опцию с загрузкой файла с Вашего устройства"
+                    )
 
     with st.expander("🗃️ Дополнительный функционал"):
         summary_checkbox = st.checkbox("🔎 Аннотирование текста", value=False)
@@ -179,7 +184,7 @@ with st.container():
                 }
                 """,
             ):
-                st.code(body=transcr_text)
+                st.code(body=transcr_text, language=None)
 
         with st.expander("🔎 Аннотированный текст"):
             if summary_checkbox:
@@ -193,7 +198,7 @@ with st.container():
                         }
                         """,
                     ):
-                        st.code(body=summarized_text)
+                        st.code(body=summarized_text, language=None)
 
         with st.expander("🎞️ SRT-файл для скачивания"):
             subs = pysubs2.load_from_whisper(segments_for_srt)

@@ -1,3 +1,4 @@
+"""Module to provide function to check if we can use a CUDA GPU."""
 import ctypes
 
 

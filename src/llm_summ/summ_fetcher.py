@@ -1,3 +1,4 @@
+"""Module for fetching summary from LLM API for provided text."""
 import os
 
 import openai
@@ -31,12 +32,12 @@ def fetch_summary(
         else:
             openai.api_key = llm_api_key
     except Exception as error:
-        raise ValueError(f"LLM_API key error: {error}")
+        raise ValueError(f"LLM_API key error: {error}") from error
 
     try:
         openai.base_url = os.environ["LLM_URL"]
     except Exception as error:
-        raise ValueError(f"LLM_URL error: {error}")
+        raise ValueError(f"LLM_URL error: {error}") from error
 
     prompt = f"Дай краткий пересказ этого текста: {text}"
 
