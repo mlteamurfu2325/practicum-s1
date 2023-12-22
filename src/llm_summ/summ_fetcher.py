@@ -6,7 +6,7 @@ import openai
 
 def fetch_summary(
     text: str,
-    llm_model: str = "openai/gpt-3.5-turbo-1106",
+    llm_model: str = "openai/gpt-4-1106-preview",
     llm_api_key: str | None = None,
 ) -> str:
     """Fetch summary from LLM API using provided text and optionally an API key.

@@ -11,39 +11,19 @@ from streamlit_extras.stylable_container import stylable_container
 from llm_summ.summ_fetcher import fetch_summary
 from utils.cuda_checker import check_cuda
 from utils.data_validator import validate_youtube_url
+from utils.upload_file_saver import save_uploaded_file
 
 
-# No type hints yet available for Streamlit
-# so no specifi type hint available for `uploaded_file`
-# See https://github.com/streamlit/streamlit/issues/7801
-def save_uploaded_file(uploaded_file) -> Path:
-    """
-    Save an uploaded file to the specified directory and return the file path.
-
-    :param uploaded_file: The file uploaded by the user through the Streamlit interface.
-    :return: The path to the saved file.
-    :rtype: Path
-    """
-    dir_path = Path("../media")
-    dir_path.mkdir(parents=True, exist_ok=True)
-
-    # create a path object for the file
-    file_path = dir_path / uploaded_file.name
-
-    # write the file
-    with file_path.open("wb") as f:
-        f.write(uploaded_file.getbuffer())
-
-    st.toast(f"Saved file: {file_path}")
-
-    return file_path
-
+st.set_page_config(
+    page_title="Транскрайбер-аннотатор",
+    page_icon="🎙️",
+)
 
 st.markdown("### 📖 Итоговый проект группы 1.12")
 
 uploaded_file_path = ""
 with st.container():
-    st.write("Выбор видеофайла для транскибирования")
+    st.write("Выбор медиафайла для транскрибирования")
     file_mode = st.selectbox(
         "Выберите тип загрузки файла: ",
         ["С Вашего устройства", "С YouTube"],
@@ -98,7 +78,7 @@ with st.container():
         transcribe_text = ""
 
     transcribe = st.button(
-        label="🏁 Запустить транскибирование!",
+        label="🏁 Запустить транскрибирование!",
         disabled=not st.session_state.get("file_path"),
     )
 
