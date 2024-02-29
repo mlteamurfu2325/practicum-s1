@@ -9,7 +9,7 @@ def fetch_summary(
     llm_model: str = "openai/gpt-4-1106-preview",
     llm_api_key: str | None = None,
 ) -> str:
-    """Fetch summary from LLM API using provided text and optionally an API key.
+    """Fetch summary from LLM API using given text and optionally an API key.
 
     :param text: Input text to summarize
     :type text: str
