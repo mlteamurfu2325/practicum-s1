@@ -1,4 +1,5 @@
 """Module for fetching summary from LLM API for provided text."""
+
 import os
 
 import openai
