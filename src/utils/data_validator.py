@@ -1,4 +1,5 @@
 """Module to validate user input of YouTube URLs."""
+
 import re
 
 
