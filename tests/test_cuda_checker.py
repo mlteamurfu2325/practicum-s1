@@ -1,4 +1,5 @@
 """Test src/utils/cuda_checker.py"""
+
 from unittest.mock import patch
 
 from src.utils.cuda_checker import check_cuda
