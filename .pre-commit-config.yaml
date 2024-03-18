@@ -1,7 +1,7 @@
 exclude: '^.+(\.md)$'
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.4.0
+    rev: v4.5.0
     hooks:
       - id: check-added-large-files
       - id: check-ast
@@ -20,7 +20,7 @@ repos:
         args: ["--profile", "black", "--lines-after-imports", "2"]
 
   - repo: https://github.com/psf/black
-    rev: 23.12.0
+    rev: 24.3.0
     hooks:
       - id: black
         name: black (Python code formatter)

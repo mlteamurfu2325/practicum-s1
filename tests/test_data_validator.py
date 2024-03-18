@@ -1,4 +1,5 @@
 """Test src/utils/data_validator.py"""
+
 import pytest
 
 from src.utils.data_validator import validate_youtube_url
