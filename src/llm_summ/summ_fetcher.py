@@ -1,4 +1,5 @@
 """Module for fetching summary from LLM API for provided text."""
+
 from os import getenv
 
 from openai import OpenAI
@@ -27,11 +28,19 @@ def fetch_summary(
 
     """
 
-    prompt = f"Дай краткий пересказ этого текста на русском языке. В твоём ответе должен быть только сам пересказ. Не используй ничего, кроме самого текста, который я тебе сейчас отправил после двоеточия: {text}"
+    prompt = (
+        f"Дай краткий пересказ этого текста на русском языке. "
+        f"В твоём ответе должен быть только сам пересказ. "
+        f"Не используй ничего, кроме самого текста, который я тебе "
+        f"сейчас отправил после двоеточия: {text}"
+    )
+
+    if not llm_api_key:
+        llm_api_key = getenv("LLM_API_KEY")
 
     client = OpenAI(
         base_url=getenv("LLM_URL"),
-        api_key=getenv("LLM_API_KEY"),
+        api_key=llm_api_key,
     )
 
     completion = client.chat.completions.create(
