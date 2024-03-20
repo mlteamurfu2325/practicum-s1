@@ -1,12 +1,12 @@
 """Module for fetching summary from LLM API for provided text."""
-import os
+from os import getenv
 
-import openai
+from openai import OpenAI
 
 
 def fetch_summary(
     text: str,
-    llm_model: str = "openai/gpt-4-1106-preview",
+    llm_model: str = "openai/gpt-4-turbo-preview",
     llm_api_key: str | None = None,
 ) -> str:
     """Fetch summary from LLM API using given text and optionally an API key.
@@ -26,33 +26,26 @@ def fetch_summary(
     >>> summary = fetch_summary(api_key, text)
 
     """
-    try:
-        if os.environ.get("LLM_API_KEY", None):
-            openai.api_key = os.environ["LLM_API_KEY"]
-        else:
-            openai.api_key = llm_api_key
-    except Exception as error:
-        raise ValueError(f"LLM_API key error: {error}") from error
 
-    try:
-        openai.base_url = os.environ["LLM_URL"]
-    except Exception as error:
-        raise ValueError(f"LLM_URL error: {error}") from error
+    prompt = f"Дай краткий пересказ этого текста на русском языке. В твоём ответе должен быть только сам пересказ. Не используй ничего, кроме самого текста, который я тебе сейчас отправил после двоеточия: {text}"
 
-    prompt = f"Дай краткий пересказ этого текста: {text}"
+    client = OpenAI(
+        base_url=getenv("LLM_URL"),
+        api_key=getenv("LLM_API_KEY"),
+    )
 
-    messages = []
-
-    messages.append({"role": "user", "content": prompt})
-
-    response_big = openai.chat.completions.create(
+    completion = client.chat.completions.create(
         model=llm_model,
-        messages=messages,
+        messages=[
+            {
+                "role": "user",
+                "content": f"{prompt}",
+            },
+        ],
         temperature=0.7,
-        n=1,
         max_tokens=int(len(prompt) * 1.5),
     )
 
-    response = response_big.choices[0].message.content
+    response = completion.choices[0].message.content
 
     return response
