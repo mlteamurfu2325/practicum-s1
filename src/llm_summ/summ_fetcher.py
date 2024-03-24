@@ -12,49 +12,36 @@ def fetch_summary(
 ) -> str:
     """Fetch summary from LLM API using given text and optionally an API key.
 
-    :param text: Input text to summarize
-    :type text: str
-    :param llm_model: Name of LLM model to use
-    :type llm_model: str
-    :param llm_api_key: API key for service (optional)
-    :type llm_api_key: str, optional
-    :return: Summary text response from API
-    :rtype: str
+    Args:
+        text: Input text to summarize.
+        llm_model: Name of LLM model to use. Defaults to "openai/gpt-4-turbo-preview".
+        llm_api_key: API key for service. Defaults to None.
 
-    :Example:
+    Returns:
+        Summary text response from API.
 
-    >>> summary = fetch_summary(text)
-    >>> summary = fetch_summary(api_key, text)
-
+    Example:
+        >>> summary = fetch_summary(text)
+        >>> summary = fetch_summary(text, llm_api_key=api_key)
     """
-
     prompt = (
-        f"Дай краткий пересказ этого текста на русском языке. "
-        f"В твоём ответе должен быть только сам пересказ. "
-        f"Не используй ничего, кроме самого текста, который я тебе "
+        "Дай краткий пересказ этого текста на русском языке. "
+        "В твоём ответе должен быть только сам пересказ. "
+        "Не используй ничего, кроме самого текста, который я тебе "
         f"сейчас отправил после двоеточия: {text}"
     )
 
-    if not llm_api_key:
-        llm_api_key = getenv("LLM_API_KEY")
+    llm_api_key = llm_api_key or getenv("LLM_API_KEY")
+    llm_url = getenv("LLM_URL")
 
-    client = OpenAI(
-        base_url=getenv("LLM_URL"),
-        api_key=llm_api_key,
-    )
+    client = OpenAI(base_url=llm_url, api_key=llm_api_key)
 
     completion = client.chat.completions.create(
         model=llm_model,
-        messages=[
-            {
-                "role": "user",
-                "content": f"{prompt}",
-            },
-        ],
+        messages=[{"role": "user", "content": prompt}],
         temperature=0.7,
         max_tokens=int(len(prompt) * 1.5),
     )
 
     response = completion.choices[0].message.content
-
     return response
