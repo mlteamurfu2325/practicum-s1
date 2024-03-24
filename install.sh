@@ -100,13 +100,13 @@ if [[ $llm_choice =~ ^[Yy]$ ]]; then
     else
         LLM_API_KEY=$(echo "$3" | cut -d'=' -f2)
     fi
-    
+
     if [ -z "$4" ] || [[ "$4" != --llm_url=* ]]; then
         LLM_URL=$(prompt_user "Enter the LLM URL: ")
     else
         LLM_URL=$(echo "$4" | cut -d'=' -f2)
     fi
-    
+
     export LLM_API_KEY
     export LLM_URL
 fi
