@@ -2,6 +2,7 @@
 
 import os
 from pathlib import Path
+
 from faster_whisper import download_model
 
 
@@ -12,7 +13,7 @@ MODELS = ["medium", "large-v3"]
 def download_models():
     for model in MODELS:
         try:
-            download_model(model, output_dir = os.path.join(DIR, model))
+            download_model(model, output_dir=os.path.join(DIR, model))
         except Exception as err:
             print(f"An exception occured while downloading model {model}: {err}")
         print("Model download!")
