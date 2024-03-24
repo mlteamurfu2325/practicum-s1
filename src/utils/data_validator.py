@@ -3,21 +3,24 @@
 import re
 
 
-YT_REGEX = r"^(?:https?://)?www\.youtube\.com/watch\?v=(?P<id>[A-Za-z0-9\-=_]{11})$"
+YT_REGEX = re.compile(
+    r"^(?:https?://)?(?:www\.)?youtube\.com/watch\?v=(?P<id>[A-Za-z0-9\-=_]{11})$"
+)
 
 
 def validate_youtube_url(url: str) -> bool:
-    """Check if given string is valid YouTube URL.
+    """
+    Check if the given string is a valid YouTube URL.
 
-    :param url: Input string to validate as YouTube URL
-    :type url: str
-    :return: True if valid YouTube URL, False otherwise
-    :rtype: bool
+    Args:
+        url: Input string to validate as a YouTube URL.
 
-    :Example:
+    Returns:
+        bool: True if the URL is a valid YouTube URL, False otherwise.
 
-    >>> validate_youtube_url("https://youtu.be/dQw4w9WgXcQ")
-    True
+    Example:
+        >>> validate_youtube_url("https://www.youtube.com/watch?v=dQw4w9WgXcQ")
+        True
     """
     url = url.strip()
-    return re.match(YT_REGEX, url) is not None
+    return YT_REGEX.match(url) is not None
