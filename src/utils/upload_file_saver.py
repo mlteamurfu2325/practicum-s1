@@ -5,7 +5,7 @@ from pathlib import Path
 import streamlit as st
 
 
-def save_uploaded_file(uploaded_file: st.uploaded_file_manager.UploadedFile) -> Path:
+def save_uploaded_file(uploaded_file) -> Path:
     """
     Save an uploaded file to the specified directory and return the file path.
 
