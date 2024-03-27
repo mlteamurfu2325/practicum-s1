@@ -21,12 +21,11 @@ command_exists() {
 cleanup() {
     echo "Cleaning up..."
     deactivate >/dev/null 2>&1
-    rm -rf "$HOME/$dir_name"
     exit 1
 }
 
 # Trap signals and errors
-trap cleanup SIGINT SIGTERM ERR
+trap cleanup SIGTERM ERR
 
 # Check if Python and pip are available
 if command_exists python3; then
@@ -115,7 +114,9 @@ fi
 read -p "Do you want to run the app? (y/n): " run_choice
 if [[ $run_choice =~ ^[Yy]$ ]]; then
     streamlit run run_app.py
+    # Clean up on normal script completion
+    cleanup
+else
+    # Clean up if user chooses not to run the app
+    cleanup
 fi
-
-# Clean up on normal script completion
-cleanup
