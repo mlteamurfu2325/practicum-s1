@@ -19,7 +19,7 @@ jobs:
     - name: Make sure shunit2 is installed
       run: |
         sudo apt update && sudo apt install shunit2
-    
+
     - name: Run installation test
       run: |
         chmod +x tests/test_install.sh
