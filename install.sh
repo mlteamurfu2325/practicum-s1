@@ -46,33 +46,35 @@ else
     exit 1
 fi
 
-# Check if dir_name is provided as a parameter
-if [ -z "$1" ] || [[ "$1" != --dir_name=* ]]; then
-    dir_name=$(prompt_user "Enter the directory name: ")
-else
-    dir_name=$(echo "$1" | cut -d'=' -f2)
-fi
+# Parse command line arguments
+for arg in "$@"; do
+    case $arg in
+        --dir_name=*)
+            dir_name="${arg#*=}"
+            ;;
+        --git_branch=*)
+            branch="${arg#*=}"
+            ;;
+        --llm_summarizer=*)
+            llm_summarizer="${arg#*=}"
+            ;;
+        --run_app=*)
+            run_app="${arg#*=}"
+            ;;
+        --llm_api_key=*)
+            LLM_API_KEY="${arg#*=}"
+            ;;
+        --llm_url=*)
+            LLM_URL="${arg#*=}"
+            ;;
+    esac
+done
 
-# Check if git_branch is provided as a parameter
-if [ -z "$2" ] || [[ "$2" != --git_branch=* ]]; then
-    branch=$(prompt_user "Enter the git branch (press Enter for 'main'): " "main")
-else
-    branch=$(echo "$2" | cut -d'=' -f2)
-fi
-
-# Check if llm_summarizer is provided as a parameter
-if [ -z "$3" ] || [[ "$3" != --llm_summarizer=* ]]; then
-    llm_summarizer=$(prompt_user "Do you need LLM summarizer functionality? (y/n): " "n")
-else
-    llm_summarizer=$(echo "$3" | cut -d'=' -f2)
-fi
-
-# Check if run_app is provided as a parameter
-if [ -z "$4" ] || [[ "$4" != --run_app=* ]]; then
-    run_app=$(prompt_user "Do you want to run the app? (y/n): " "n")
-else
-    run_app=$(echo "$4" | cut -d'=' -f2)
-fi
+# Set default values if not provided
+dir_name=${dir_name:-$(prompt_user "Enter the directory name: ")}
+branch=${branch:-$(prompt_user "Enter the git branch (press Enter for 'main'): " "main")}
+llm_summarizer=${llm_summarizer:-$(prompt_user "Do you need LLM summarizer functionality? (y/n): " "n")}
+run_app=${run_app:-$(prompt_user "Do you want to run the app? (y/n): " "n")}
 
 # Create directory and navigate to it
 mkdir -p "$HOME/$dir_name" && cd "$HOME/$dir_name" || exit 1
@@ -106,16 +108,12 @@ cd src/ || exit 1
 
 if [[ $llm_summarizer =~ ^[Yy]$ ]]; then
     # Check if LLM_API_KEY and LLM_URL are provided as parameters
-    if [ -z "$5" ] || [[ "$5" != --llm_api_key=* ]]; then
+    if [ -z "$LLM_API_KEY" ]; then
         LLM_API_KEY=$(prompt_user "Enter the LLM API key: ")
-    else
-        LLM_API_KEY=$(echo "$5" | cut -d'=' -f2)
     fi
 
-    if [ -z "$6" ] || [[ "$6" != --llm_url=* ]]; then
+    if [ -z "$LLM_URL" ]; then
         LLM_URL=$(prompt_user "Enter the LLM URL: ")
-    else
-        LLM_URL=$(echo "$6" | cut -d'=' -f2)
     fi
 
     export LLM_API_KEY
