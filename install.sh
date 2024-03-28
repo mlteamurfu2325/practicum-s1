@@ -18,15 +18,20 @@ command_exists() {
 }
 
 # Function to clean up on script termination or error
-cleanup() {
+cleanup_on_ok() {
     echo "Cleaning up..."
     deactivate >/dev/null 2>&1
-    rm -rf "$HOME/$dir_name"
+    exit 0
+}
+
+cleanup_on_not_ok() {
+    echo "Cleaning up..."
+    deactivate >/dev/null 2>&1
     exit 1
 }
 
 # Trap signals and errors
-trap cleanup SIGINT SIGTERM ERR
+trap cleanup_on_not_ok SIGTERM ERR
 
 # Check if Python and pip are available
 if command_exists python3; then
@@ -47,19 +52,35 @@ else
     exit 1
 fi
 
-# Check if dir_name is provided as a parameter
-if [ -z "$1" ] || [[ "$1" != --dir_name=* ]]; then
-    dir_name=$(prompt_user "Enter the directory name: ")
-else
-    dir_name=$(echo "$1" | cut -d'=' -f2)
-fi
+# Parse command line arguments
+for arg in "$@"; do
+    case $arg in
+        --dir_name=*)
+            dir_name="${arg#*=}"
+            ;;
+        --git_branch=*)
+            branch="${arg#*=}"
+            ;;
+        --llm_summarizer=*)
+            llm_summarizer="${arg#*=}"
+            ;;
+        --run_app=*)
+            run_app="${arg#*=}"
+            ;;
+        --llm_api_key=*)
+            LLM_API_KEY="${arg#*=}"
+            ;;
+        --llm_url=*)
+            LLM_URL="${arg#*=}"
+            ;;
+    esac
+done
 
-# Check if git_branch is provided as a parameter
-if [ -z "$2" ] || [[ "$2" != --git_branch=* ]]; then
-    branch=$(prompt_user "Enter the git branch (press Enter for 'main'): " "main")
-else
-    branch=$(echo "$2" | cut -d'=' -f2)
-fi
+# Set default values if not provided
+dir_name=${dir_name:-$(prompt_user "Enter the directory name: ")}
+branch=${branch:-$(prompt_user "Enter the git branch (press Enter for 'main'): " "main")}
+llm_summarizer=${llm_summarizer:-$(prompt_user "Do you need LLM summarizer functionality? (y/n): " "n")}
+run_app=${run_app:-$(prompt_user "Do you want to run the app? (y/n): " "n")}
 
 # Create directory and navigate to it
 mkdir -p "$HOME/$dir_name" && cd "$HOME/$dir_name" || exit 1
@@ -91,31 +112,25 @@ mkdir -p models/faster-whisper/ || exit 1
 # Navigate to the src directory
 cd src/ || exit 1
 
-# Prompt user if LLM summarizer functionality is needed
-read -p "Do you need LLM summarizer functionality? (y/n): " llm_choice
-if [[ $llm_choice =~ ^[Yy]$ ]]; then
+if [[ $llm_summarizer =~ ^[Yy]$ ]]; then
     # Check if LLM_API_KEY and LLM_URL are provided as parameters
-    if [ -z "$3" ] || [[ "$3" != --llm_api_key=* ]]; then
+    if [ -z "$LLM_API_KEY" ]; then
         LLM_API_KEY=$(prompt_user "Enter the LLM API key: ")
-    else
-        LLM_API_KEY=$(echo "$3" | cut -d'=' -f2)
     fi
 
-    if [ -z "$4" ] || [[ "$4" != --llm_url=* ]]; then
+    if [ -z "$LLM_URL" ]; then
         LLM_URL=$(prompt_user "Enter the LLM URL: ")
-    else
-        LLM_URL=$(echo "$4" | cut -d'=' -f2)
     fi
 
     export LLM_API_KEY
     export LLM_URL
 fi
 
-# Prompt user if they want to run the app
-read -p "Do you want to run the app? (y/n): " run_choice
-if [[ $run_choice =~ ^[Yy]$ ]]; then
+if [[ $run_app =~ ^[Yy]$ ]]; then
     streamlit run run_app.py
+    # Clean up on normal script completion
+    cleanup_on_ok
+else
+    # Clean up if user chooses not to run the app
+    cleanup_on_ok
 fi
-
-# Clean up on normal script completion
-cleanup

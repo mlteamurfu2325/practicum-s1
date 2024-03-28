@@ -1,0 +1,32 @@
+name: install.sh test with shunit2
+
+on:
+  push:
+    branches:
+      - '**'
+  pull_request:
+    branches:
+      - '**'
+  workflow_dispatch:
+
+jobs:
+  test_install:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Make sure shunit2 is installed
+      run: |
+        sudo apt update && sudo apt install shunit2
+
+    - name: Run installation test
+      run: |
+        chmod +x tests/test_install.sh
+        tests/test_install.sh
+
+    - name: Check exit code
+      if: ${{ failure() }}
+      run: |
+        echo "Installation test failed. Please check the test_install.sh and install.sh script."
+        exit 1
