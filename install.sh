@@ -60,6 +60,20 @@ else
     branch=$(echo "$2" | cut -d'=' -f2)
 fi
 
+# Check if llm_summarizer is provided as a parameter
+if [ -z "$3" ] || [[ "$3" != --llm_summarizer=* ]]; then
+    llm_summarizer=$(prompt_user "Do you need LLM summarizer functionality? (y/n): " "n")
+else
+    llm_summarizer=$(echo "$3" | cut -d'=' -f2)
+fi
+
+# Check if run_app is provided as a parameter
+if [ -z "$4" ] || [[ "$4" != --run_app=* ]]; then
+    run_app=$(prompt_user "Do you want to run the app? (y/n): " "n")
+else
+    run_app=$(echo "$4" | cut -d'=' -f2)
+fi
+
 # Create directory and navigate to it
 mkdir -p "$HOME/$dir_name" && cd "$HOME/$dir_name" || exit 1
 
@@ -90,29 +104,25 @@ mkdir -p models/faster-whisper/ || exit 1
 # Navigate to the src directory
 cd src/ || exit 1
 
-# Prompt user if LLM summarizer functionality is needed
-read -p "Do you need LLM summarizer functionality? (y/n): " llm_choice
-if [[ $llm_choice =~ ^[Yy]$ ]]; then
+if [[ $llm_summarizer =~ ^[Yy]$ ]]; then
     # Check if LLM_API_KEY and LLM_URL are provided as parameters
-    if [ -z "$3" ] || [[ "$3" != --llm_api_key=* ]]; then
+    if [ -z "$5" ] || [[ "$5" != --llm_api_key=* ]]; then
         LLM_API_KEY=$(prompt_user "Enter the LLM API key: ")
     else
-        LLM_API_KEY=$(echo "$3" | cut -d'=' -f2)
+        LLM_API_KEY=$(echo "$5" | cut -d'=' -f2)
     fi
 
-    if [ -z "$4" ] || [[ "$4" != --llm_url=* ]]; then
+    if [ -z "$6" ] || [[ "$6" != --llm_url=* ]]; then
         LLM_URL=$(prompt_user "Enter the LLM URL: ")
     else
-        LLM_URL=$(echo "$4" | cut -d'=' -f2)
+        LLM_URL=$(echo "$6" | cut -d'=' -f2)
     fi
 
     export LLM_API_KEY
     export LLM_URL
 fi
 
-# Prompt user if they want to run the app
-read -p "Do you want to run the app? (y/n): " run_choice
-if [[ $run_choice =~ ^[Yy]$ ]]; then
+if [[ $run_app =~ ^[Yy]$ ]]; then
     streamlit run run_app.py
     # Clean up on normal script completion
     cleanup
