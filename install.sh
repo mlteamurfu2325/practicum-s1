@@ -18,14 +18,20 @@ command_exists() {
 }
 
 # Function to clean up on script termination or error
-cleanup() {
+cleanup_on_ok() {
+    echo "Cleaning up..."
+    deactivate >/dev/null 2>&1
+    exit 0
+}
+
+cleanup_on_not_ok() {
     echo "Cleaning up..."
     deactivate >/dev/null 2>&1
     exit 1
 }
 
 # Trap signals and errors
-trap cleanup SIGTERM ERR
+trap cleanup_on_not_ok SIGTERM ERR
 
 # Check if Python and pip are available
 if command_exists python3; then
@@ -123,8 +129,8 @@ fi
 if [[ $run_app =~ ^[Yy]$ ]]; then
     streamlit run run_app.py
     # Clean up on normal script completion
-    cleanup
+    cleanup_on_ok
 else
     # Clean up if user chooses not to run the app
-    cleanup
+    cleanup_on_ok
 fi
