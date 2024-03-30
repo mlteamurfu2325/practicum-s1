@@ -1,5 +1,6 @@
 import time
 from pathlib import Path
+from typing import Dict
 
 import pysubs2
 import streamlit as st
@@ -76,6 +77,19 @@ with st.container():
     with st.expander("🗃️ Дополнительный функционал"):
         summary_checkbox = st.checkbox("🔎 Аннотирование текста", value=False)
         transcribe_text = ""
+
+        if summary_checkbox:
+            model_options: Dict[str, str] = {
+                "google/gemma-7b-it:nitro": "Gemma 7B (nitro) non-free",
+                "google/gemma-7b-it:free": "Gemma 7B free",
+                "google/gemini-pro": "Gemini Pro 1.0",
+            }
+
+            selected_model = st.selectbox(
+                "Выберите модель LLM для аннотирования:",
+                options=list(model_options.keys()),
+                format_func=lambda x: model_options[x],
+            )
 
     transcribe = st.button(
         label="🏁 Запустить транскрибирование!",
@@ -169,7 +183,7 @@ with st.container():
         with st.expander("🔎 Аннотированный текст"):
             if summary_checkbox:
                 with st.spinner("🕵️‍♂️ Аннотируем текст..."):
-                    summarized_text = fetch_summary(text=transcr_text)
+                    summarized_text = fetch_summary(text=transcr_text, llm_model=selected_model)
                     with stylable_container(
                         "codeblock",
                         """
