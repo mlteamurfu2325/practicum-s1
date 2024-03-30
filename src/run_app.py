@@ -183,7 +183,9 @@ with st.container():
         with st.expander("🔎 Аннотированный текст"):
             if summary_checkbox:
                 with st.spinner("🕵️‍♂️ Аннотируем текст..."):
-                    summarized_text = fetch_summary(text=transcr_text, llm_model=selected_model)
+                    summarized_text = fetch_summary(
+                        text=transcr_text, llm_model=selected_model
+                    )
                     with stylable_container(
                         "codeblock",
                         """
