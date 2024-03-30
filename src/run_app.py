@@ -83,7 +83,7 @@ with st.container():
                 "google/gemma-7b-it:nitro": "Gemma 7B (nitro) [платно]",
                 "google/gemma-7b-it:free": "Gemma 7B [бесплатно]",
                 "google/gemini-pro": "Gemini Pro 1.0 [платно]",
-                "openai/gpt-4-turbo-preview": "GPT 4 Turbo Preview [платно]"
+                "openai/gpt-4-turbo-preview": "GPT 4 Turbo Preview [платно]",
             }
 
             selected_model = st.selectbox(
