@@ -1,4 +1,5 @@
-faster-whisper
+ctranslate2==3.24.0
+faster-whisper==0.9.0
 streamlit
 pytube
 openai

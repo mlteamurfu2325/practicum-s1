@@ -7,7 +7,7 @@ from faster_whisper import download_model
 
 
 DIR = os.path.join(str(Path.cwd()), "models", "faster-whisper")
-MODELS = ["medium", "large-v3"]
+MODELS = ["medium", "large-v2"]
 
 
 def download_models():

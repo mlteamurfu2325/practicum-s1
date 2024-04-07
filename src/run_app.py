@@ -103,7 +103,7 @@ with st.container():
 
         with st.spinner("🚚 Загружаем модель. Минутку..."):
             if check_cuda():
-                selected_model_path = "../models/faster-whisper/large-v3/"
+                selected_model_path = "../models/faster-whisper/large-v2/"
                 local_device = "cuda"
                 selected_compute_type = "int8_float16"
                 st.toast(body="Обнаружен GPU. Будет ускоряться!", icon="🚀")
