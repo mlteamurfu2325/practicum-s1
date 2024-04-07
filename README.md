@@ -2,7 +2,7 @@
 <img src="https://media.giphy.com/media/XuBtcsV266vepmoEYG/giphy.gif" width="250" height="250"/>
 
 ---
-![gh_showcase_01](https://github.com/mlteamurfu2325/practicum-s1/assets/149804920/3c8ee228-68b5-4916-badd-895211c83671)
+![gh_showcase_01](docs/app_demo.gif)
 
 
 

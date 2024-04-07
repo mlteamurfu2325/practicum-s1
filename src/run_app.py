@@ -20,7 +20,7 @@ st.set_page_config(
     page_icon="🎙️",
 )
 
-st.markdown("### 📖 Итоговый проект группы 1.12")
+st.markdown("### 📖 Итоговый проект группы 16")
 
 uploaded_file_path = ""
 with st.container():
