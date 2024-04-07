@@ -77,7 +77,7 @@ for arg in "$@"; do
 done
 
 # Set default values if not provided
-dir_name=${dir_name:-$(prompt_user "Enter the directory name: ")}
+dir_name=${dir_name:-$(prompt_user "Enter the new directory name in your $HOME: ")}
 branch=${branch:-$(prompt_user "Enter the git branch (press Enter for 'main'): " "main")}
 llm_summarizer=${llm_summarizer:-$(prompt_user "Do you need LLM summarizer functionality? (y/n): " "n")}
 run_app=${run_app:-$(prompt_user "Do you want to run the app? (y/n): " "n")}
@@ -101,7 +101,7 @@ fi
 source .venv-practicum/bin/activate || exit 1
 
 # Install dependencies
-"$pip_cmd" -r requirements.txt || exit 1
+"$pip_cmd" install -r requirements.txt || exit 1
 
 # Create models directory
 mkdir -p models/faster-whisper/ || exit 1
