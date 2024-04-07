@@ -101,7 +101,7 @@ fi
 source .venv-practicum/bin/activate || exit 1
 
 # Install dependencies
-"$pip_cmd" install faster-whisper streamlit pytube openai pysubs2 streamlit_ext streamlit_extras || exit 1
+"$pip_cmd" -r requirements.txt || exit 1
 
 # Create models directory
 mkdir -p models/faster-whisper/ || exit 1
