@@ -2,7 +2,6 @@
 
 import re
 
-
 YT_REGEX = re.compile(
     r"^(?:https?://)?(?:www\.)?youtube\.com/watch\?v=(?P<id>[A-Za-z0-9\-=_]{11})$"
 )
