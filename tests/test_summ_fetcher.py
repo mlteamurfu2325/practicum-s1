@@ -2,7 +2,6 @@ import pytest
 
 from llm_summ.summ_fetcher import fetch_summary
 
-
 MODELS = [
     "google/gemma-7b-it:free",
     "openai/gpt-4-turbo-preview",
