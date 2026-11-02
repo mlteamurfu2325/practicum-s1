@@ -5,7 +5,6 @@ from pathlib import Path
 
 from faster_whisper import download_model
 
-
 DIR = os.path.join(str(Path.cwd()), "models", "faster-whisper")
 MODELS = ["medium", "large-v2"]
 
