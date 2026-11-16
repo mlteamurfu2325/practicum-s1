@@ -14,7 +14,6 @@ from utils.cuda_checker import check_cuda
 from utils.data_validator import validate_youtube_url
 from utils.upload_file_saver import save_uploaded_file
 
-
 st.set_page_config(
     page_title="Транскрайбер-аннотатор",
     page_icon="🎙️",
